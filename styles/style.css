@@ -1,0 +1,145 @@
+html, body{
+  background-color: green;
+  font-family: "Open Sans", sans-serif;
+}
+
+body{
+  margin: 0px;
+}
+
+textarea{
+  display: block;
+  margin-bottom: 5px;
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 50%;
+  resize: none;
+}
+
+header{
+  display: flex;
+  justify-content: center;
+}
+
+.title-wrapper{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-wrapper{
+  display: block;
+}
+
+h1,h2{
+  color: maroon;
+}
+
+h1{
+  font-weight: bolder;
+  font-size: 2.5em;
+  margin: 0px;
+}
+
+h2{
+  margin: 0px;
+}
+
+h4{
+  margin: 0px;
+  padding: 0px;
+  color: white;
+}
+
+.text{
+  border: solid 5px maroon;
+  border-radius: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #006600;
+  color: white;
+  width: 30em;
+  height: 15em;
+  box-shadow: 1px 2px black;
+}
+
+.king{
+  background-size: cover;
+  width: 4vw;
+  height: 4vw;
+}
+
+.face-left{
+  background-image: url("../assets/images/king-left.gif");
+}
+
+.face-right{
+  background-image: url("../assets/images/king-right.gif");
+}
+
+h2,.king{
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#side-bar{
+  display: inline-block;
+  margin: 5px;
+  width: auto;
+}
+
+#solution-area{
+  margin: 5px;
+  width: auto;
+}
+
+#solution-text{
+  height: calc(100% - 60px);
+  width: auto;
+  padding: 30px;
+  padding-bottom: 0px;
+}
+
+#solution{
+  color: black;
+  background-color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: solid 1px gray;
+  width: 60em;
+  height: 80%;
+}
+
+.wrapper{
+  display: flex;
+}
+
+#game-num{
+  height: 1.5em;
+}
+
+.button{
+  border: 2px solid maroon;
+  color: white;
+  padding: 5px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.button:hover{
+  filter: brightness(120%);
+}
+
+#submit{
+  background-color: green;
+}
+
+#error{
+  font-size: 24px;
+  font-weight: bold;
+}

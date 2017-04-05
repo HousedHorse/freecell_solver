@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="utf-8">
+<title>freecell_solver</title>
+<meta name="description" content="Freecell solving application by William Findlay">
+<meta name="author" content="William Findlay">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+<link rel="stylesheet" href="../styles/style.css"></link>
+
+<link rel="icon" type="image/png" href="../assets/images/king-right.gif">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/king.js"></script>
+
+
+<header>
+  <div class="header-wrapper">
+    <h1>William Findlay's</h1>
+    <div class="title-wrapper">
+      <h2 class="title">FreeCell</h2>
+      <div class="king face-right"></div>
+      <h2 class="title">Solver</h2>
+    </div>
+  </div>
+</header>
+
+<div class="wrapper">
+<div id="side-bar">
+  <div class="text">
+
+    <h4>Instructions:</h4>
+
+    <p>Enter the game number of your MS FreeCell game into the textbox below
+    labeled <span style="color:#e06c75"><b>Game#</b></span>&nbsp;.</p>
+
+    <p>When you have entered your game number, click the <span style="color:#e06c75"><b>submit</b></span> button.</p>
+
+    <p>My javascript application will calculate the <span style="color:#e06c75"><b>solution</b></span> to your game and output it in the space to the <span style="color:#e06c75"><b>right</b></span>.</p>
+
+  </div>
+  
+  <div class="text">
+    
+    <h4>Game#:</h4>
+    <textarea id="game-num"></textarea>
+    <button class="button" id="submit">Submit</button>
+    <p id="error"></p>
+    
+  </div>
+</div>
+
+<div id="solution-area">
+  <div id="solution-text" class="text">
+    
+    <h4>Board:</h4>
+    <div id="solution"></div>
+  
+  </div>
+</div>
+</div>
+</html>
