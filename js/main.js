@@ -1,14 +1,14 @@
 "use strict";
 
 //text defintions:
-var spades = "<span style=\"color:black;font-size:1.25em\">&spades;</span>";
-var hearts = "<span style=\"color:red;font-size:1.25em\">&hearts;</span>";
-var diamonds = "<span style=\"color:red;font-size:1.25em\">&diams;</span>";
-var clubs = "<span style=\"color:black;font-size:1.25em\">&clubs;</span>";
+const SPADES = "<span style=\"color:black;font-size:1.25em\">&spades;</span>";
+const HEARTS = "<span style=\"color:red;font-size:1.25em\">&hearts;</span>";
+const DIAMONDS = "<span style=\"color:red;font-size:1.25em\">&diams;</span>";
+const CLUBS = "<span style=\"color:black;font-size:1.25em\">&clubs;</span>";
+
+const STACKS = 8;
 
 $(document).ready(function(){
-    
-  console.log(Math.pow(2,31));
   
   var solver = new Solver();
   
@@ -52,10 +52,11 @@ function submit(solver){
   }
   
   //solve the board
+  var board = solver.displayBoard(solver.board);
   var solution = solver.solve();
   
-  //display solution
-  $('#solution').html(solution);
+  //display board
+  $('#board').html(board);
 }
 
 //class defintions
@@ -64,125 +65,129 @@ function Solver(id){
     this.id = -1;
   }else{
     this.id = id-0;
+    this.board = this.genBoard();
   }
   
   this.setId = function(id){
     this.id = id-0;
+    this.board = this.genBoard();
   }
   this.getId = function(){
     return this.id;
   }
   
   //generate board
-  this.board = function(){
+  this.genBoard = function(){
     var cards = [];
     var deal = [];
-    //suit
-    for(var i = 0; i < 4; i++){
-      var suit = "";
-      switch(i){
-        case 0:
-          suit = "C";
-          break;
-        case 1:
-          suit = "D";
-          break;
-        case 2:
-          suit = "H";
-          break;
-        case 3:
-          suit = "S";
-          break;
-      }
-      //number
-      for(var j = 0; j < 13; j++){
-        var num = "";
-        switch(j){
-          case 0:
-            num = "A";
-            break;
-          case 10:
-            num = "J";
-            break;
-          case 11:
-            num = "Q";
-            break;
-          case 12:
-            num = "K";
-            break;
-          default:
-            num = j+1;
-            break;
-        }
-        //add card to the array of cards
-        cards.push(card(num+suit) + " ");
-      }
+    
+    //add cards
+    for(var i = 0; i < 52; i++){
+      cards.push(new Card(i));
     }
     
     //use ID as the seed for LCG
     for(var i = 0; cards.length > 0; i++){
       //pick a random card
-      var index = rand(this.id, i+1) % cards.length;
+      var index = rand(this.id, i) % cards.length;
       
       //swap the random card and the last card
       var temp = cards[index];
-      cards[index] = cards[cards.length-1];
+	    cards[index] = cards[cards.length-1];
       cards[cards.length-1] = temp;
       
       //pop the last card off the deck and put it into the deal stack
       deal.push(cards.pop());
     }
     
-    //for now....
-    return deal;
+    var board = [];
+    for(var i = 0; i < deal.length; i++){
+      if(i < STACKS){
+        board.push(new Array());
+      }
+      
+      board[i % STACKS].push(deal[i]);
+    }
+    
+    return board;
+  }
+  
+
+  this.displayBoard = function(b){
+    var ret = "";
+    for(var i = 0; i < b.length; i++){
+      ret += i + 1 + "&nbsp;::";
+      for(var j = 0; j < b[i].length; j++){
+        ret += b[i][j] + " ";
+      }
+      ret += "<br>";
+    }
+    return ret;
   }
   
   this.solve = function(){
-    //for now, to test
-    return this.board();
+    //for now, to test///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    return this.displayBoard(this.board);
   }
 }
 
-function card(c){
-  var num = c[0].toUpperCase();
-  if (c[1] === "0"){
-    num += c[1];
-    var suit = c[2].toLowerCase();
-  }else{
-  var suit = c[1].toLowerCase();
-  }
+function Card(n){
+  //set suit based on n
+  this.suit = (n % 4) + 1; // 1 - clubs
+                           // 2 - diamonds
+                           // 3 - hearts
+                           // 4 - spades
+                           
+  //set rank based on n
+  this.rank = Math.floor(n / 4) + 1;
+}
+
+//tostring function for card
+Card.prototype.toString = function(){
+  var ret = "";
   
-  var suitstring;
-  
-  //set suit
-  switch(suit){
+  //set rank
+  switch(this.rank){
     case 1:
-    case "s":
-    case "spades":
-      suitstring = spades;
+      ret += "&nbsp;A";
       break;
-    case 2:
-    case "h":
-    case "hearts":
-      suitstring = hearts;
+    case 11:
+      ret += "&nbsp;J";
       break;
-    case 3:
-    case "d":
-    case "diams":
-    case "diamonds":
-      suitstring = diamonds;
+    case 12:
+      ret += "&nbsp;Q";
       break;
-    case 4:
-    case "c":
-    case "clubs":
-      suitstring = clubs;
+    case 13:
+      ret += "&nbsp;K";
+      break;
+    case 10:
+      ret += "10";
       break;
     default:
-      suitstring = spades;
+      ret += "&nbsp;" + this.rank;
+      break;
   }
   
-  //return number and suit
-  return num+suitstring;
+  //set suit
+  switch(this.suit){
+    case 1:
+      ret += CLUBS;
+      break;
+    case 2:
+      ret += DIAMONDS;
+      break;
+    case 3:
+      ret += HEARTS;
+      break;
+    case 4:
+      ret += SPADES;
+      break;
+    default:
+      ret += "#";
+      break;
+  }
+  
+  return ret;
 }
 
 //RNG functions
@@ -195,9 +200,5 @@ function lcg(seed, n){
 }
 
 function rand(seed, n){
-  return Math.floor(lcg(seed, n) / (Math.pow(2,16)));
-}
-
-function nextLcg(seed, prev){
-  return (214013 * prev + 2531011) % (Math.pow(2,31));
+  return Math.floor(lcg(seed, n+1) / (Math.pow(2,16)));
 }

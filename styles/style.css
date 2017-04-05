@@ -97,20 +97,25 @@ h2,.king{
 }
 
 #solution-text{
-  height: calc(100% - 60px);
   width: auto;
+  height: auto;
   padding: 30px;
   padding-bottom: 0px;
 }
 
-#solution{
+.box{
+  font-family: courier;
   color: black;
   background-color: white;
   padding-left: 10px;
   padding-right: 10px;
   border: solid 1px gray;
-  width: 60em;
-  height: 80%;
+  width: 40em;
+  height: 20em;
+}
+
+.box:last-child{
+  margin-bottom: 15px;
 }
 
 .wrapper{
