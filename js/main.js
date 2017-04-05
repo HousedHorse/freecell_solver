@@ -127,7 +127,7 @@ function Solver(id){
   
   this.solve = function(){
     //for now, to test///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    return this.displayBoard(this.board);
+    //return this.displayBoard(this.board);
   }
 }
 
@@ -188,6 +188,16 @@ Card.prototype.toString = function(){
   }
   
   return ret;
+}
+
+function Cell(suit){
+  //set suit for foundations or 0 for freecells
+  if(!suit){
+    this.suit = 0;
+  }
+  else{
+    this.suit = suit;
+  }
 }
 
 //RNG functions
