@@ -14,12 +14,12 @@ const STACKS = 8;
 const F = STACKS;
 const FC = STACKS+1;
 
+var freecells = STACKS + 4;
+
 $(document).ready(function(){
   
-  var solver = new Solver();
-  
   //submit button
-  $('#submit').click(function(){submit(solver)});
+  $('#submit').click(function(){submit()});
 });
 
 function error(txt){
@@ -32,7 +32,9 @@ function error(txt){
   },3000);
 }
 
-function submit(solver){
+function submit(){
+  var solver = new Solver();
+  
   //set id to the value of the game num textbox
   var id = ($('#game-num').val());
   
@@ -67,24 +69,27 @@ function submit(solver){
 
 //class defintions
 function Solver(id){
-  var R1;
-  var R2;
-  var R3;
-  var R4;
-  var R5;
-  var R6;
-  var R7;
-  var R8;
+  //vars for foundations
+  var hfound = new Cell(H);
+  var cfound = new Cell(C);
+  var dfound = new Cell(D);
+  var sfound = new Cell(S);
   
-  var FC1;
-  var FC2;
-  var FC3;
-  var FC4;
+  //vars for freecells
+  var fc1 = new Cell();
+  var fc2 = new Cell();
+  var fc3 = new Cell();
+  var fc4 = new Cell();
   
-  var F1;
-  var F2;
-  var F3;
-  var F4; 
+  //vars for rows
+  var r1 = new Row();
+  var r2 = new Row();
+  var r3 = new Row();
+  var r4 = new Row();
+  var r5 = new Row();
+  var r6 = new Row();
+  var r7 = new Row();
+  var r8 = new Row();
    
   if(!id){
     this.id = -1;
@@ -103,6 +108,7 @@ function Solver(id){
   
   //generate board
   this.genBoard = function(){
+    freecells = STACKS + 4;
     var cards = [];
     var deal = [];
     
@@ -126,52 +132,62 @@ function Solver(id){
     }
     
     var board = [];
+    
+    //add rows to the board
+    board.push(r1);
+    board.push(r2);
+    board.push(r3);
+    board.push(r4);
+    board.push(r5);
+    board.push(r6);
+    board.push(r7);
+    board.push(r8);
+    
+    for(var i = 0; i < deal.length; i++){
+      board[i % STACKS].push(deal[i]);
+    }
+    
+    //push the 
+    
+    
     //add two extra arrays for foundations and freecells
     board.push(new Array());
     board.push(new Array());
     
-    for(var i = 0; i < deal.length; i++){
-      if(i < STACKS){
-        board.push(new Array());
-      }
-      
-      board[i % STACKS].push(deal[i]);
-    }
-    
     //add freecells and foundations ///// [STACKS] is foundations [STACKS+1] is cells
-    board[STACKS].push(new Cell(H));
-    board[STACKS].push(new Cell(C));
-    board[STACKS].push(new Cell(D));
-    board[STACKS].push(new Cell(S));
+    board[STACKS].push(hfound);
+    board[STACKS].push(cfound);
+    board[STACKS].push(dfound);
+    board[STACKS].push(sfound);
     
-    board[STACKS+1].push(new Cell());
-    board[STACKS+1].push(new Cell());
-    board[STACKS+1].push(new Cell());
-    board[STACKS+1].push(new Cell());
+    board[STACKS+1].push(fc1);
+    board[STACKS+1].push(fc2);
+    board[STACKS+1].push(fc3);
+    board[STACKS+1].push(fc4);
     
-    // R1 = board[0];
-    // R2 = board[1];
-    // R3 = board[2];
-    // R4 = board[3];
-    // R5 = board[4];
-    // R6 = board[5];
-    // R7 = board[6];
-    // R8 = board[7];
-    // 
-    // FC1 = board[9][0];
-    // FC2 = board[9][1];
-    // FC3 = board[9][2];
-    // FC4 = board[9][3];
-    // 
-    // F1 = board[8][0];
-    // F2 = board[8][1];
-    // F3 = board[8][2];
-    // F4 = board[8][3];
+    console.log(r1.topCard+"");
+    console.log(r2.topCard+"");
+    console.log(r3.topCard+"");
+    console.log(r4.topCard+"");
+    console.log(r5.topCard+"");
     
-    board[F][0].push(board[0].pop());
-    board[FC][0].push(board[0].pop());
+    console.log(fc1.topCard+"");
+    console.log(cfound.topCard+"");
     
-    board[0].push(board[F][0].pop());
+    fc1.push(r1.pop());
+    r6.pop();
+    r6.pop();
+    cfound.push(r6.pop());
+    
+    console.log("new top cards:");
+    console.log(r1.topCard+"");
+    console.log(r2.topCard+"");
+    console.log(r3.topCard+"");
+    console.log(r4.topCard+"");
+    console.log(r5.topCard+"");
+    
+    console.log(fc1.topCard+"");
+    console.log(dfound.topCard+"");
     
     return board;
   }
@@ -201,9 +217,7 @@ function Solver(id){
     
     for(var i = 0; i < STACKS; i++){
       ret += i + 1 + "&nbsp;::";
-      for(var j = 0; j < b[i].length; j++){
-        ret += b[i][j] + " ";
-      }
+      ret+= b[i];
       ret += "<br>";
     }
     return ret;
@@ -225,7 +239,7 @@ function Card(n){
   this.rank = Math.floor(n / 4) + 1;
 }
 
-//tostring function for card
+//CARD TO STRING
 Card.prototype.toString = function(){
   var ret = "";
   
@@ -273,6 +287,7 @@ Card.prototype.toString = function(){
   return ret;
 }
 
+//CLASS: Cell
 function Cell(suit){
   //set suit for foundations or 0 for freecells
   if(!suit){
@@ -282,7 +297,8 @@ function Cell(suit){
     this.suit = suit;
   }
   
-  this.topCard = "#";
+  //set topCard to its default value of 0
+  this.topCard = 0;
   
   // function: push
   //  purpose: push the card c onto the cell. includes logic to check if the
@@ -293,7 +309,7 @@ function Cell(suit){
     //if it is a foundation cell
     if (this.suit !== 0){
       //and if it is empty
-      if(this.topCard !== "#"){
+      if(this.topCard !== 0){
         //and if the card being pushed is not an ace
         if(c.rank !== 1){
           return null;
@@ -311,30 +327,37 @@ function Cell(suit){
     }
     
     //if it is a regular free cell then return null if it has a card on it
-    if(this.topCard !== "#"){
+    if(this.topCard !== 0){
       return null;
     }
     
     //else push the card
+    freecells--;
     this.topCard = c;
   }
   
+  // function: pop
+  //  purpose: pop the card off the cell and return it
+  //  returns: null if no card is on the cell, the card otherwise
   this.pop = function(){
-    if(this.topCard === "#") return null;
+    if(this.topCard === 0) return null;
+    
+    if(this.suit === 0) freecells++;
     
     var temp = this.topCard;
-    this.topCard = "#";
+    this.topCard = 0;
     return temp;
   }
 }
-
+//CELL TO STRING
 Cell.prototype.toString = function(){
   var ret = "";
   if(this.suit === 0){
-    if(this.topCard === "#"){
-      ret += "&nbsp;&nbsp;";
+    if(this.topCard === 0){
+      ret += "&nbsp;#";
+    }else{
+      ret += this.topCard;
     }
-    ret += "&nbsp;" + this.topCard;
   }else{
     switch(this.suit){
       case H:
@@ -355,10 +378,65 @@ Cell.prototype.toString = function(){
   
   return ret;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function Row(){
+  this.cards = [];
+  this.topCard = 0;
+  var size = 0;
+  
+  // function: push
+  //  purpose: push a card onto the row
+  //       in: c
+  this.push = function(c){
+    if(size === 0){
+      freecells--;
+    }
+    this.cards.push(c);
+    this.topCard = c;
+    size++;
+  }
+  
+  // function: pop
+  //  purpose: pop a card off the row and return it
+  //  returns: null if no card is in the row, the card otherwise
+  this.pop = function(){
+    if(size === 0){
+      return null
+    }else if(size === 1){
+      freecells++;
+    }
+    
+    ret = this.cards.pop();
+    size--;
+    if(size > 0){
+      this.topCard = this.cards[size-1]
+    }else{
+      this.topCard = 0;
+    }
+    
+    return ret;
+  }
+}
+
+Row.prototype.toString = function(){
+  var ret = "";
+  for(var j = 0; j <this.cards.length; j++){
+    ret += this.cards[j] + " ";
+  }
+  return ret;
+}
+
+//CLASS: Move
 function Move(start,end,board){
   this.done = false;
   
+  //temporary start variables
+  var _start = start.pop();
+  
+  // function: make
+  //  purpose: change the board state based on the move
+  //  returns: null if move is invalid
+  //       in: c
   this.make = function(){
     end.push(start.pop());
     this.done = true;
