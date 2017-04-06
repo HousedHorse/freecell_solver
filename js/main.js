@@ -48,13 +48,11 @@ function submit(){
   id = id-0;
   
   //other checks
-  if(id >= 0 && id <= 100000000){
+  if(id >= 0){
     //if input is correct, submit
     solver.setId(id);
   }else if(id < 0){
     error("Game ID must be greater than or equal to 0");
-  }else if(id > 100000000){
-    error("Game ID must be less than or equal to 100,000,000");
   }else{
     error("Game ID must be a number");
   }
