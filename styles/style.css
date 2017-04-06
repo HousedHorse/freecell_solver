@@ -29,20 +29,21 @@ header{
 }
 
 .header-wrapper{
+  font-family: "Open Sans 800", sans-serif;
   display: block;
 }
 
 h1,h2{
   color: maroon;
-}
-
-h1{
-  font-weight: bolder;
-  font-size: 2.5em;
   margin: 0px;
 }
 
+h1{
+  font-size: 40px;
+}
+
 h2{
+  font-size: 20px;
   margin: 0px;
 }
 
@@ -67,8 +68,8 @@ h4{
 
 .king{
   background-size: cover;
-  width: 4vw;
-  height: 4vw;
+  width: 4em;
+  height: 4em;
 }
 
 .face-left{
