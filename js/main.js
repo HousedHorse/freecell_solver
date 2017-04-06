@@ -165,30 +165,6 @@ function Solver(id){
     board[STACKS+1].push(fc3);
     board[STACKS+1].push(fc4);
     
-    console.log(r1.topCard+"");
-    console.log(r2.topCard+"");
-    console.log(r3.topCard+"");
-    console.log(r4.topCard+"");
-    console.log(r5.topCard+"");
-    
-    console.log(fc1.topCard+"");
-    console.log(cfound.topCard+"");
-    
-    fc1.push(r1.pop());
-    r6.pop();
-    r6.pop();
-    cfound.push(r6.pop());
-    
-    console.log("new top cards:");
-    console.log(r1.topCard+"");
-    console.log(r2.topCard+"");
-    console.log(r3.topCard+"");
-    console.log(r4.topCard+"");
-    console.log(r5.topCard+"");
-    
-    console.log(fc1.topCard+"");
-    console.log(dfound.topCard+"");
-    
     return board;
   }
   
@@ -228,6 +204,7 @@ function Solver(id){
   }
 }
 
+//CLASS: card
 function Card(n){
   //set suit based on n
   this.suit = (n % 4) + 1; // 1 - clubs
@@ -309,7 +286,7 @@ function Cell(suit){
     //if it is a foundation cell
     if (this.suit !== 0){
       //and if it is empty
-      if(this.topCard !== 0){
+      if(this.topCard === 0){
         //and if the card being pushed is not an ace
         if(c.rank !== 1){
           return null;
@@ -373,7 +350,34 @@ Cell.prototype.toString = function(){
         ret += SPADES;
         break;
     }
-    ret += "-" + (this.topCard.rank || this.topCard) + "&nbsp;";
+    
+    //format rank for display in foundations
+    var rank = "";
+    
+    if(this.topCard.rank){
+      switch(this.topCard.rank){
+        case 1:
+          rank = "&nbsp;A";
+          break;
+        case 11:
+          rank = "&nbsp;J";
+          break;
+        case 12:
+          rank = "&nbsp;Q";
+          break;
+        case 13:
+         rank = "&nbsp;K";
+          break;
+        case 10:
+          rank = "10";
+          break;
+        default:
+          rank = "&nbsp;" + this.rank;
+          break;
+      }
+    }
+    
+    ret += "-" + (rank ||  "&nbsp;" + this.topCard) + "&nbsp;";
   }
   
   return ret;
